@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+    <title>图书馆欢迎你</title>
+    <link rel="stylesheet" href="stylesheets/bootstrap.min.css">
+    <link rel="stylesheet" href="stylesheets/homepage_style.css">
+</head>
+
+<body>
+    <div class="container" ng-app="homePageApp" ng-controller="HomepageCtrl">
+        <header class="header-wrap">
+            <div class="time-show">
+                <span class="date-time-js">{{dateTime}}</span>
+            </div>
+            <div ng-controller="ModalCtrl">
+                <script type="text/ng-template" id="myModalContent.html">
+                    <div class="modal-header">
+                        <h3 class="modal-title" id="modal-title">用户登录</h3>
+                    </div>
+                    <div class="modal-body" id="modal-body">
+                        <form name="logInForm" ng-controller="LogInController">
+                            <label>用户名:
+                                <input type="text" name="usernameInput" class="username-input" ng-model="user.name" ng-pattern="user.namePattern" required ng-trim="false" ng-change="nameChange()"><br>
+                                <h5 class="error" ng-show="logInForm.usernameInput.$error.pattern">
+                                    用户名输入非法！
+                                </h5>
+                            </label><br>
+                            <label class="pswd-label">密码:
+                                <input type="password" name="pswdInput" class="pswd-input" ng-model="user.pswd" required ng-trim="false" ng-change="pswdChange()"><br>
+                            </label><br>
+                        </form>
+                        <h5 class="error" ng-show="illegalInput">{{warningString}}</h5>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-primary" type="button" ng-click="ok()">登录</button>
+                        <button class="btn btn-warning" type="button" ng-click="cancel()">取消</button>
+                    </div>
+                </script>
+                <span class="login-btn" ng-click="open('sm')">登录</span>
+            </div>
+        </header>
+        <section>
+            <div class="search-wrap" ng-class="{'search-wrap-after-click': searchResultShow}">
+                <img src="images/book.png" alt="books" width="42px" id='book-icon'>
+                <input type="text" name="" ng-model="bookSearchText" class="search-input">
+                <div class="search-button" ng-click="bookSearch()">
+                    <img src="images/search.png" alt="serch" width="42px">
+                </div>
+            </div>
+            <div class="search-ret-container" ng-show="searchResultShow">
+                <div class="separator"></div>
+                <div class="alert-wrap" ng-class="{'show-alert':searchAlertShow}">
+                        <div uib-alert ng-repeat="alert in alerts" ng-class="'alert-' + (alert.type || 'warning')" close="closeAlert($index)">{{alert.msg}}</div>
+                </div>
+                <!-- 展示图书搜索结果 -->
+                <ul class="ret-list">
+                    <!-- NG-REPEAT -->
+                    <li class="book-container" ng-repeat="book in bookset">
+                        <img src="{{book.IMG}}" alt="">
+                        <div class="book-info">
+                            <span>{{book.BOOK_NAME}}</span><br>
+                            <span>{{book.WRITER}}</span><br>
+                            <span>{{book.PUBLISHER}}</span><br>
+                            <span>类型：{{book.TYPE}}</span><br>
+                            <span>ISBN：{{book.ISBN}}</span>
+                        </div>
+                    </li>
+                   
+                </ul>
+                <!-- 底部分页链接 -->
+                <div class="pagination-container">
+                     <ul uib-pagination items-per-page="itemsPerPage" total-items="totalItems" ng-model="currentPage" ng-change="pageChanged()" max-size="maxSize" class="pagination-sm" boundary-links="true" force-ellipses="true"></ul>
+                </div>
+            </div>
+        </section>
+        <footer class="footer-wrap">
+            <div class="footer-content">
+                <span class="clickable">
+                <a href="/readme">关于此项目</a></span>
+                <span>|</span>
+                <span>使用条款</span>
+                <span>|</span>
+                <span>帮助</span>
+                <span>|</span>
+                <span>反馈</span>
+                <!-- TODO:链接readme.md -->
+            </div>
+        </footer>
+    </div>
+    <script src="javascripts/moment.min.js"></script>
+    <script src="javascripts/zh-cn.js"></script>
+    <script src="javascripts/angular.min.js"></script>
+    <script src="javascripts/angular-animate.min.js"></script>
+    <script src="javascripts/angular-sanitize.min.js"></script>
+    <script src="javascripts/angular-cookies.min.js"></script>
+    <script src="javascripts/ui-bootstrap-tpls.min.js"></script>
+    <script src="javascripts/sha.js"></script>
+    <script src="javascripts/homepage_main.js"></script>
+</body>
+
+</html>
